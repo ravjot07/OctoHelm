@@ -1,3 +1,3 @@
-module github.com/example/release-demo/service-a
+module service-a
 
 go 1.18
