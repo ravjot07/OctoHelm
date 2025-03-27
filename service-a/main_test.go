@@ -16,7 +16,7 @@ func TestHelloHandler(t *testing.T) {
 
 	resp := w.Result()
 	body, _ := ioutil.ReadAll(resp.Body)
-	expected := "Hello from Service A from octo!\n"
+	expected := "Hello from Service A from octo!"
 	if strings.TrimSpace(string(body)) != strings.TrimSpace(expected) {
 		t.Errorf("expected %q, got %q", expected, string(body))
 	}
