@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-service-a:
+    name: Build and Test Service A
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go for Service A
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Download dependencies for Service A
+        run: |
+          cd service-a
+          go mod download
+
+      - name: Run tests for Service A
+        run: |
+          cd service-a
+          go test -v ./...
+
+      - name: Build binary for Service A
+        run: |
+          cd service-a
+          go build -v -o service-a .
+
+      - name: Build Docker image for Service A
+        run: docker build -t example/service-a:latest ./service-a
+
+      - name: Helm Lint for Service A
+        run: helm lint helm/service-a
