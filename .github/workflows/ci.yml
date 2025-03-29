@@ -39,3 +39,36 @@ jobs:
 
       - name: Helm Lint for Service A
         run: helm lint helm/service-a
+
+  build-service-b:
+    name: Build and Test Service B
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go for Service B
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Download dependencies for Service B
+        run: |
+          cd service-b
+          go mod download
+
+      - name: Run tests for Service B
+        run: |
+          cd service-b
+          go test -v ./...
+
+      - name: Build binary for Service B
+        run: |
+          cd service-b
+          go build -v -o service-b .
+
+      - name: Build Docker image for Service B
+        run: docker build -t example/service-b:latest ./service-b
+
+      - name: Helm Lint for Service B
+        run: helm lint helm/service-b
